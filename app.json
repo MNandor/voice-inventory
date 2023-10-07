@@ -16,12 +16,17 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "pro.nandor.voiceinventory"
+      "bundleIdentifier": "pro.nandor.voiceinventory",
+      "infoPlist": {
+        "NSSpeechRecognitionUsageDescription": "This app uses speech recognition to convert your speech to text.",
+        "NSCameraUsageDescription": "This app uses the camera to let user put a photo in his profile page."
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#ffffff",
+        "permissions": ["android.permission.RECORD_AUDIO"]
       },
       "package": "pro.nandor.voiceinventory"
     },
