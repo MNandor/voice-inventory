@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, TouchableHighlight } from 'react-native';
 import React, { Component } from 'react';
 
 import Voice, {
@@ -49,6 +49,31 @@ class VoiceTest extends Component<Props, State> {
       });
   };
 
+
+  _startRecognizing = async () => {
+    this.setState({
+      error: '',
+      started: '',
+      results: [],
+      partialResults: [],
+      end: '',
+    });
+
+    try {
+      await Voice.start('en-US');
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  _stopRecognizing = async () => {
+    try {
+      await Voice.stop();
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   render() {
     return (
       <View style={styles.container}>
@@ -71,6 +96,13 @@ class VoiceTest extends Component<Props, State> {
           );
         })}
 
+<TouchableHighlight onPress={this._startRecognizing}>
+          <Text style={styles.action}>Start Recognizing</Text>
+        </TouchableHighlight>
+        <TouchableHighlight onPress={this._stopRecognizing}>
+          <Text style={styles.action}>Stop Recognizing</Text>
+        </TouchableHighlight>
+
         <StatusBar style="auto" />
       </View>
     );
@@ -83,6 +115,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  action: {
+    textAlign: 'center',
+    color: '#0000FF',
+    marginVertical: 5,
+    fontWeight: 'bold',
   },
 });
 
