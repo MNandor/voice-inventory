@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TouchableHighlight, TextInput } from 'react-native';
 import React, { Component } from 'react';
-import languages from './languages.json'
+import * as languages from './languages.json'
 
 import Voice, {
   SpeechRecognizedEvent,
@@ -17,6 +17,16 @@ type State = {
   partialResults: string[];
   language: string
 };
+
+type Command = {
+  key: string
+  value: string
+}
+
+type ListeningStatus = {
+  command: string
+  paramCount: string
+}
 
 class VoiceTest extends Component<Props, State> {
   state = {
@@ -87,6 +97,63 @@ class VoiceTest extends Component<Props, State> {
     });
   }
 
+  textToCommands = (text: String) => {
+
+    if (text == undefined)
+      return []
+
+    const words = text.toLowerCase().split(" ")
+
+    let commands: Command[] = []
+    let currentCommand: Command | undefined = undefined
+
+    words.forEach(word => {
+      if (word == "count" || word == "code"){
+        if (currentCommand != undefined){
+          commands = [...commands, currentCommand]
+        }
+        currentCommand = {
+          key: word,
+          value: ""
+        }
+      } else if (word in ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", ] && currentCommand != undefined){
+        currentCommand.value += word
+      } else if (word == "reset"){
+        currentCommand = undefined
+      }
+    }
+    )
+
+    if (currentCommand != undefined){
+      commands = [...commands, currentCommand]
+    }
+
+    return commands
+
+  }
+
+  getStatus = () => {
+    const arr = this.textToCommands(this.state.partialResults[0])
+
+    if (arr.length < 1){
+      const status: ListeningStatus = {
+        command: "Waiting",
+        paramCount: ""
+      }
+
+      return status
+    }
+    
+    const latest = arr.slice(-1)[0]
+
+    const status: ListeningStatus = {
+      command: latest.key,
+      paramCount: latest.value.length.toString()
+    }
+
+    return status
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -110,8 +177,8 @@ class VoiceTest extends Component<Props, State> {
 
         <View style={{...styles.box, backgroundColor: 'lightgreen'}}>
           <Text style={styles.boxTitle}>Current Status</Text>
-          <Text>Status: {this.state.status}</Text>
-          <Text>Parameters: </Text>
+          <Text>Status: {this.getStatus().command}</Text>
+          <Text>Parameters: {this.getStatus().paramCount}</Text>
         </View>
 
         <View style={{...styles.box, backgroundColor: 'lightblue'}}>
