@@ -115,7 +115,8 @@ class VoiceTest extends Component<Props, State> {
 
         <View style={{...styles.box, backgroundColor: 'lightblue'}}>
           <Text style={styles.boxTitle}>Current Speech</Text>
-          <Text>{this.state.partialResults[0]}</Text>
+          {/* change "tail" to "head"? */}
+          <Text numberOfLines={1} ellipsizeMode="head">{this.state.partialResults[0]}</Text>
         </View>
 
         <Text>Results</Text>
