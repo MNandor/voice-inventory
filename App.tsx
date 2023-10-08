@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TouchableHighlight } from 'react-native';
+import { StyleSheet, Text, View, TouchableHighlight, TextInput } from 'react-native';
 import React, { Component } from 'react';
 
 import Voice, {
@@ -11,8 +11,7 @@ import Voice, {
 type Props = {};
 type State = {
   error: string;
-  end: string;
-  started: string;
+  status: string;
   results: string[];
   partialResults: string[];
 };
@@ -20,8 +19,7 @@ type State = {
 class VoiceTest extends Component<Props, State> {
   state = {
     error: '',
-    end: '',
-    started: '',
+    status: '',
     results: [],
     partialResults: [],
   };
@@ -53,10 +51,9 @@ class VoiceTest extends Component<Props, State> {
   _startRecognizing = async () => {
     this.setState({
       error: '',
-      started: '',
+      status: '',
       results: [],
       partialResults: [],
-      end: '',
     });
 
     try {
@@ -74,10 +71,35 @@ class VoiceTest extends Component<Props, State> {
     }
   };
 
+  updateDebugText = (text: string) => {
+    this.setState({
+      partialResults: [text]
+    });
+  }
+
+  submitDebugText = () => {
+    this.setState((prevState) => {
+      return {
+        partialResults: [],
+        results: [...prevState.results, prevState.partialResults[0]]
+      }
+    });
+  }
+
   render() {
     return (
       <View style={styles.container}>
         <Text>Open up App.tsx to start working on your app!</Text>
+
+        <TextInput
+        onChangeText={this.updateDebugText} // Call this function when TextInput changes
+        value={this.state.partialResults.at(0)}
+        style = {styles.debugEdit}
+        />
+
+        <TouchableHighlight onPress={this.submitDebugText}>
+          <Text style={styles.action}>Submit</Text>
+        </TouchableHighlight>
 
         <Text>Results</Text>
         {this.state.results.map((result, index) => {
@@ -122,6 +144,10 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     fontWeight: 'bold',
   },
+  debugEdit: {
+    borderWidth: 1,  // Border width
+    borderColor: 'red',  // Border color
+  }
 });
 
 export default VoiceTest;
