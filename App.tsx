@@ -89,8 +89,6 @@ class VoiceTest extends Component<Props, State> {
   render() {
     return (
       <View style={styles.container}>
-        <Text>Open up App.tsx to start working on your app!</Text>
-
         <TextInput
         onChangeText={this.updateDebugText} // Call this function when TextInput changes
         value={this.state.partialResults.at(0)}
@@ -125,6 +123,18 @@ class VoiceTest extends Component<Props, State> {
           <Text style={styles.action}>Stop Recognizing</Text>
         </TouchableHighlight>
 
+
+        <View style={{...styles.box, backgroundColor: 'lightgreen'}}>
+          <Text style={styles.boxTitle}>Current Status</Text>
+          <Text>Status: </Text>
+          <Text>Parameters: </Text>
+        </View>
+
+        <View style={{...styles.box, backgroundColor: 'lightblue'}}>
+          <Text style={styles.boxTitle}>Current Speech</Text>
+          <Text>{this.state.partialResults[0]}</Text>
+        </View>
+
         <StatusBar style="auto" />
       </View>
     );
@@ -147,7 +157,19 @@ const styles = StyleSheet.create({
   debugEdit: {
     borderWidth: 1,  // Border width
     borderColor: 'red',  // Border color
+  },
+  box: {
+    width: '40%',
+    padding: 10,
+    backgroundColor: "lightgreen",
+    margin: 8,
+    aspectRatio: 2
+  },
+  boxTitle: {
+    fontWeight: 'bold',
+    textAlign: 'center'
   }
+
 });
 
 export default VoiceTest;
