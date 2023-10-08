@@ -28,13 +28,49 @@ class VoiceTest extends Component<Props, State> {
 
   constructor(props: Props) {
     super(props);
+    Voice.onSpeechResults = this.onSpeechResults;
+    Voice.onSpeechPartialResults = this.onSpeechPartialResults;
 
   }
+
+  onSpeechResults = (e: SpeechResultsEvent) => {
+    console.log('onSpeechResults: ', e);
+    if (e.value !== undefined)
+      this.setState({
+        results: e.value,
+      });
+  };
+
+  onSpeechPartialResults = (e: SpeechResultsEvent) => {
+    console.log('onSpeechPartialResults: ', e);
+    if (e.value !== undefined)
+      this.setState({
+        partialResults: e.value,
+      });
+  };
 
   render() {
     return (
       <View style={styles.container}>
         <Text>Open up App.tsx to start working on your app!</Text>
+
+        <Text>Results</Text>
+        {this.state.results.map((result, index) => {
+          return (
+            <Text key={`result-${index}`}>
+              {result}
+            </Text>
+          );
+        })}
+        <Text>Partial Results</Text>
+        {this.state.partialResults.map((result, index) => {
+          return (
+            <Text key={`partial-result-${index}`}>
+              {result}
+            </Text>
+          );
+        })}
+
         <StatusBar style="auto" />
       </View>
     );
