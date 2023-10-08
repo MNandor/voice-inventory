@@ -15,21 +15,22 @@ type State = {
   status: string;
   results: string[];
   partialResults: string[];
+  language: string
 };
 
 class VoiceTest extends Component<Props, State> {
   state = {
     error: '',
-    status: '',
+    status: 'Not Started',
     results: [],
     partialResults: [],
+    language: "en-US"
   };
 
   constructor(props: Props) {
     super(props);
     Voice.onSpeechResults = this.onSpeechResults;
     Voice.onSpeechPartialResults = this.onSpeechPartialResults;
-
   }
 
   onSpeechResults = (e: SpeechResultsEvent) => {
@@ -52,13 +53,12 @@ class VoiceTest extends Component<Props, State> {
   _startRecognizing = async () => {
     this.setState({
       error: '',
-      status: '',
-      results: [],
+      status: 'Waiting',
       partialResults: [],
     });
 
     try {
-      await Voice.start('en-US');
+      await Voice.start(this.state.language);
     } catch (e) {
       console.error(e);
     }
@@ -110,7 +110,7 @@ class VoiceTest extends Component<Props, State> {
 
         <View style={{...styles.box, backgroundColor: 'lightgreen'}}>
           <Text style={styles.boxTitle}>Current Status</Text>
-          <Text>Status: </Text>
+          <Text>Status: {this.state.status}</Text>
           <Text>Parameters: </Text>
         </View>
 
