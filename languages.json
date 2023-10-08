@@ -1,0 +1,37 @@
+{
+    "en-US" : {
+        "code":"COMMAND_CODE",
+        "count":"COMMAND_COUNT",
+        "reset":"COMMAND_RESET",
+        "back":"COMMAND_BACK",
+        "zero":"0",
+        "one":"1",
+        "two":"2",
+        "three":"3",
+        "four":"4",
+        "five":"5",
+        "six":"6",
+        "seven":"7",
+        "eight":"8",
+        "nine":"9"
+    },
+
+    "de-DE": {
+        "code":"COMMAND_CODE",
+        "anzahl":"COMMAND_COUNT",
+        "zurücksetzen":"COMMAND_RESET",
+        "zurück":"COMMAND_BACK",
+        "zurückgehen":"COMMAND_BACK",
+        "null":"0",
+        "eins":"1",
+        "zwei":"2",
+        "zwo":"2",
+        "drei":"3",
+        "vier":"4",
+        "fünf":"5",
+        "sechs":"6",
+        "sieben":"7",
+        "acht":"8",
+        "neun":"9"
+    }
+}

@@ -1,6 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TouchableHighlight, TextInput } from 'react-native';
 import React, { Component } from 'react';
+import languages from './languages.json'
 
 import Voice, {
   SpeechRecognizedEvent,
@@ -119,7 +120,7 @@ class VoiceTest extends Component<Props, State> {
           <Text numberOfLines={1} ellipsizeMode="head">{this.state.partialResults[0]}</Text>
         </View>
 
-        <Text>Results</Text>
+        <Text>Values</Text>
         {this.state.results.reverse().map((result, index) => {
           return (
             <View style={{...styles.box, backgroundColor: 'lightgray'}}>
