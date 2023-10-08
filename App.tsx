@@ -99,23 +99,6 @@ class VoiceTest extends Component<Props, State> {
           <Text style={styles.action}>Submit</Text>
         </TouchableHighlight>
 
-        <Text>Results</Text>
-        {this.state.results.map((result, index) => {
-          return (
-            <Text key={`result-${index}`}>
-              {result}
-            </Text>
-          );
-        })}
-        <Text>Partial Results</Text>
-        {this.state.partialResults.map((result, index) => {
-          return (
-            <Text key={`partial-result-${index}`}>
-              {result}
-            </Text>
-          );
-        })}
-
 <TouchableHighlight onPress={this._startRecognizing}>
           <Text style={styles.action}>Start Recognizing</Text>
         </TouchableHighlight>
@@ -134,6 +117,18 @@ class VoiceTest extends Component<Props, State> {
           <Text style={styles.boxTitle}>Current Speech</Text>
           <Text>{this.state.partialResults[0]}</Text>
         </View>
+
+        <Text>Results</Text>
+        {this.state.results.reverse().map((result, index) => {
+          return (
+            <View style={{...styles.box, backgroundColor: 'lightgray'}}>
+              <Text key={`result-${index}`}>
+                {result}
+              </Text>
+            </View>
+            
+          );
+        })}
 
         <StatusBar style="auto" />
       </View>
