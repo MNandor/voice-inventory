@@ -90,13 +90,21 @@ class VoiceTest extends Component<Props, State> {
 
   submitDebugText = () => {
 
-    const newCommands = 
+    const newCommands = this.textToCommands(this.state.partialResults[0])
 
     this.setState((prevState) => {
+
+      let prevCommands = prevState.loggedCommands
+
+      while(newCommands.length > 0 && newCommands[0].key == currentLanguage.commandBack){
+        prevCommands.pop()
+        newCommands.shift()
+      }
+
       return {
         partialResults: [],
         results: [...prevState.results],
-        loggedCommands: [...prevState.loggedCommands, ...this.textToCommands(this.state.partialResults[0])]
+        loggedCommands: [...prevCommands, ...newCommands]
       }
     });
   }
@@ -206,7 +214,7 @@ class VoiceTest extends Component<Props, State> {
         </View>
 
         <Text>Values</Text>
-        {this.state.loggedCommands.reverse().map((command, index) => {
+        {this.state.loggedCommands.slice().reverse().map((command, index) => {
           return (
             <View style={{...styles.box, backgroundColor: 'lightgray'}}>
               <Text> Command: {command.key} </Text>
