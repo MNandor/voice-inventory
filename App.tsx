@@ -237,7 +237,7 @@ class VoiceTest extends Component<Props, State> {
         <ScrollView style={{width: '100%' }} contentContainerStyle={{alignItems: 'center'}}>
         {this.state.loggedCommands.slice().reverse().map((command, index) => {
           return (
-            <View style={{...styles.box, backgroundColor: 'lightgray'}}>
+            <View style={{...styles.box, backgroundColor: 'lightgray'}} key={index}>
               <Text> Command: {command.key} </Text>
               <Text> Value: {command.value} </Text>
             </View>
