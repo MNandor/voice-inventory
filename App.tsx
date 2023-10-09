@@ -197,22 +197,28 @@ class VoiceTest extends Component<Props, State> {
   render() {
     return (
       <View style={styles.container}>
-        <TextInput
-        onChangeText={this.updateDebugText} // Call this function when TextInput changes
-        value={this.state.partialResults.at(0)}
-        style = {styles.debugEdit}
-        />
 
-        <TouchableHighlight onPress={this.submitDebugText}>
-          <Text style={styles.action}>Submit</Text>
-        </TouchableHighlight>
+        <View style={styles.leftRight}>
+          <TextInput
+          onChangeText={this.updateDebugText} // Call this function when TextInput changes
+          value={this.state.partialResults.at(0)}
+          style = {styles.debugEdit}
+          placeholder='Type to simulate voice'
+          />
 
-<TouchableHighlight onPress={this._startRecognizing}>
-          <Text style={styles.action}>Start Recognizing</Text>
-        </TouchableHighlight>
-        <TouchableHighlight onPress={this._stopRecognizing}>
-          <Text style={styles.action}>Stop Recognizing</Text>
-        </TouchableHighlight>
+          <TouchableHighlight onPress={this.submitDebugText}>
+            <Text style={styles.action}>Submit</Text>
+          </TouchableHighlight>
+        </View>
+
+        <View style={styles.leftRight}>
+          <TouchableHighlight onPress={this._startRecognizing}>
+            <Text style={styles.action}>Start Recognizing</Text>
+          </TouchableHighlight>
+          <TouchableHighlight onPress={this._stopRecognizing}>
+            <Text style={styles.action}>Stop Recognizing</Text>
+          </TouchableHighlight>
+        </View>
 
 
         <View style={{...styles.box, backgroundColor: 'lightgreen'}}>
@@ -256,6 +262,7 @@ const styles = StyleSheet.create({
     color: '#0000FF',
     marginVertical: 5,
     fontWeight: 'bold',
+    padding: 4,
   },
   debugEdit: {
     borderWidth: 1,  // Border width
@@ -271,6 +278,9 @@ const styles = StyleSheet.create({
   boxTitle: {
     fontWeight: 'bold',
     textAlign: 'center'
+  },
+  leftRight: {
+    flexDirection: 'row',
   }
 
 });
