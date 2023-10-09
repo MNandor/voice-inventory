@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TouchableHighlight, TextInput } from 'react-native';
+import { StyleSheet, Text, View, TouchableHighlight, TextInput, ScrollView } from 'react-native';
 import React, { Component } from 'react';
 import currentLanguage from "./Language"
 
@@ -234,6 +234,7 @@ class VoiceTest extends Component<Props, State> {
         </View>
 
         <Text>Values</Text>
+        <ScrollView style={{width: '100%' }} contentContainerStyle={{alignItems: 'center'}}>
         {this.state.loggedCommands.slice().reverse().map((command, index) => {
           return (
             <View style={{...styles.box, backgroundColor: 'lightgray'}}>
@@ -243,6 +244,7 @@ class VoiceTest extends Component<Props, State> {
             
           );
         })}
+        </ScrollView>
 
         <StatusBar style="auto" />
       </View>
@@ -255,7 +257,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
-    justifyContent: 'center',
+    paddingTop: 32
   },
   action: {
     textAlign: 'center',
