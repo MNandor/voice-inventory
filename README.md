@@ -3,6 +3,8 @@
 Mobile app that detects voice commands and arguments.
 `react-native`
 
+![](./rec.png)
+
 ## Expo
 
 This app uses Expo and [Development Builds](https://docs.expo.dev/workflow/customizing/).
