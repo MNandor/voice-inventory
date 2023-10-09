@@ -15,7 +15,8 @@ type State = {
   status: string;
   results: string[];
   partialResults: string[];
-  loggedCommands: Command[]
+  loggedCommands: Command[],
+  recognizing: boolean
 };
 
 type Command = {
@@ -34,21 +35,30 @@ class VoiceTest extends Component<Props, State> {
     status: 'Not Started',
     results: [],
     partialResults: [],
-    loggedCommands: []
+    loggedCommands: [],
+    recognizing: false
   };
 
   constructor(props: Props) {
     super(props);
     Voice.onSpeechResults = this.onSpeechResults;
     Voice.onSpeechPartialResults = this.onSpeechPartialResults;
+    Voice.onSpeechEnd = this.onSpeechEnd;
   }
 
   onSpeechResults = (e: SpeechResultsEvent) => {
     console.log('onSpeechResults: ', e);
-    if (e.value !== undefined)
+    if (e.value !== undefined && e.value.length > 0){
+    // result typically returns an array
+    // if it has multiple elements, they're generally different spellings of the same text
+    // we handle this later
+
       this.setState({
-        results: e.value,
+        partialResults: e.value.reverse(),
       });
+
+      this.submitDebugText()
+    }
   };
 
   onSpeechPartialResults = (e: SpeechResultsEvent) => {
@@ -65,6 +75,7 @@ class VoiceTest extends Component<Props, State> {
       error: '',
       status: 'Waiting',
       partialResults: [],
+      recognizing: true
     });
 
     try {
@@ -79,6 +90,18 @@ class VoiceTest extends Component<Props, State> {
       await Voice.stop();
     } catch (e) {
       console.error(e);
+    }
+  };
+
+  onSpeechEnd = async (e: any) => {
+    // the library has a tendency to stop recognizing voice
+    // after a pause in speech
+    // only stop recognizing on manual stop
+    
+    if (this.state.recognizing){
+      setTimeout(() => {
+        this._startRecognizing()
+      }, 500)
     }
   };
 
@@ -172,6 +195,13 @@ class VoiceTest extends Component<Props, State> {
 
   }
 
+  manualStopRecognizing = () => {
+    this.setState({
+      recognizing: false
+    })
+    this._stopRecognizing()
+  }
+
   getStatus = () => {
     const arr = this.textToCommands(this.state.partialResults[0])
 
@@ -215,7 +245,7 @@ class VoiceTest extends Component<Props, State> {
           <TouchableHighlight onPress={this._startRecognizing}>
             <Text style={styles.action}>Start Recognizing</Text>
           </TouchableHighlight>
-          <TouchableHighlight onPress={this._stopRecognizing}>
+          <TouchableHighlight onPress={this.manualStopRecognizing}>
             <Text style={styles.action}>Stop Recognizing</Text>
           </TouchableHighlight>
         </View>
