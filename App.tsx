@@ -92,10 +92,12 @@ class VoiceTest extends Component<Props, State> {
 
     const newCommands = this.textToCommands(this.state.partialResults[0])
 
-    this.setState((prevState) => {
+    this.setState((prevState) => { // use function setState because we reference previous state
 
       let prevCommands = prevState.loggedCommands
 
+      // handle "back" commands
+      // each removes a previously recorded command
       while(newCommands.length > 0 && newCommands[0].key == currentLanguage.commandBack){
         prevCommands.pop()
         newCommands.shift()
@@ -109,6 +111,7 @@ class VoiceTest extends Component<Props, State> {
     });
   }
 
+  // main logic: convert text to a list of commands
   textToCommands = (text: String) => {
 
     if (text == undefined)
@@ -120,29 +123,38 @@ class VoiceTest extends Component<Props, State> {
     let currentCommand: Command | undefined = undefined
 
     words.forEach(word => {
+      // standards commands
       if (word == currentLanguage.commandCount || word == currentLanguage.commandCode){
+        // starting a new command automatically ends the previous
+        // if there is a previous, commit it to our list
         if (currentCommand != undefined){
           commands = [...commands, currentCommand]
         }
+        // begin collecting their parameters
         currentCommand = {
           key: word,
           value: ""
         }
       } else if (currentLanguage.digitsFrom0.includes(word) && currentCommand != undefined) {
+        // we found a number parameter in the form of a spelled-out digit
         const digit = currentLanguage.digitsFrom0.indexOf(word)
         currentCommand.value += digit.toString()
       
       } else if (["1", "2", "3", "4", "5", "6", "7", "8", "9", "0" ].includes(word) && currentCommand != undefined){
+        // same as above except as a numeral rather than letters
         currentCommand.value += word
       } else if (word == currentLanguage.commandReset){
+        // reset command cancels current command being recorded
+        // but does nothing if it's the first in the recording batch
+        // as opposed to back, which removes even a previously recorded command
         currentCommand = undefined
       } else if (word == currentLanguage.commandBack){
         // if we had a command being recorder, back removes that (acts as reset)
         if (currentCommand != undefined){
           currentCommand = undefined
         } else {
-          // we create a reset command - to be handled later
-          // this relevant if reset if the first command in the current recording batch
+          // we create a back command - to be handled later
+          // this relevant if back is the first command in the current recording batch
           // but we had commands recorded previously
           commands = [...commands, {key:currentLanguage.commandBack, value:""}]
         }
@@ -150,6 +162,8 @@ class VoiceTest extends Component<Props, State> {
     }
     )
 
+    // the end of the recording implies the end of the current command
+    // if there is one, commit it to the list
     if (currentCommand != undefined){
       commands = [...commands, currentCommand]
     }
