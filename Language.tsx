@@ -18,7 +18,7 @@ let english:Language  = {
 
 
 let german:Language  = {
-    languageCode: "en-US",
+    languageCode: "de-DE",
     commandCode: "code",
     commandCount: "anzahl",
     commandBack: "zurück",
