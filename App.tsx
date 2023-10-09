@@ -126,8 +126,18 @@ class VoiceTest extends Component<Props, State> {
       
       } else if (["1", "2", "3", "4", "5", "6", "7", "8", "9", "0" ].includes(word) && currentCommand != undefined){
         currentCommand.value += word
-      } else if (word == "reset"){
+      } else if (word == currentLanguage.commandReset){
         currentCommand = undefined
+      } else if (word == currentLanguage.commandBack){
+        // if we had a command being recorder, back removes that (acts as reset)
+        if (currentCommand != undefined){
+          currentCommand = undefined
+        } else {
+          // we create a reset command - to be handled later
+          // this relevant if reset if the first command in the current recording batch
+          // but we had commands recorded previously
+          commands = [...commands, {key:currentLanguage.commandBack, value:""}]
+        }
       }
     }
     )
