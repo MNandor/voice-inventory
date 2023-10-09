@@ -15,7 +15,8 @@ type State = {
   status: string;
   results: string[];
   partialResults: string[];
-  language: string
+  language: string,
+  loggedCommands: Command[]
 };
 
 type Command = {
@@ -34,7 +35,8 @@ class VoiceTest extends Component<Props, State> {
     status: 'Not Started',
     results: [],
     partialResults: [],
-    language: "en-US"
+    language: "en-US",
+    loggedCommands: []
   };
 
   constructor(props: Props) {
@@ -89,10 +91,14 @@ class VoiceTest extends Component<Props, State> {
   }
 
   submitDebugText = () => {
+
+    const newCommands = 
+
     this.setState((prevState) => {
       return {
         partialResults: [],
-        results: [...prevState.results, prevState.partialResults[0]]
+        results: [...prevState.results],
+        loggedCommands: [...prevState.loggedCommands, ...this.textToCommands(this.state.partialResults[0])]
       }
     });
   }
@@ -188,12 +194,11 @@ class VoiceTest extends Component<Props, State> {
         </View>
 
         <Text>Values</Text>
-        {this.state.results.reverse().map((result, index) => {
+        {this.state.loggedCommands.reverse().map((command, index) => {
           return (
             <View style={{...styles.box, backgroundColor: 'lightgray'}}>
-              <Text key={`result-${index}`}>
-                {result}
-              </Text>
+              <Text> Command: {command.key} </Text>
+              <Text> Value: {command.value} </Text>
             </View>
             
           );
