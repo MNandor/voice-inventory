@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TouchableHighlight, TextInput } from 'react-native';
 import React, { Component } from 'react';
-import * as languages from './languages.json'
+import currentLanguage from "./Language"
 
 import Voice, {
   SpeechRecognizedEvent,
@@ -15,7 +15,6 @@ type State = {
   status: string;
   results: string[];
   partialResults: string[];
-  language: string,
   loggedCommands: Command[]
 };
 
@@ -35,7 +34,6 @@ class VoiceTest extends Component<Props, State> {
     status: 'Not Started',
     results: [],
     partialResults: [],
-    language: "en-US",
     loggedCommands: []
   };
 
@@ -70,7 +68,7 @@ class VoiceTest extends Component<Props, State> {
     });
 
     try {
-      await Voice.start(this.state.language);
+      await Voice.start(currentLanguage.languageCode);
     } catch (e) {
       console.error(e);
     }
@@ -114,7 +112,7 @@ class VoiceTest extends Component<Props, State> {
     let currentCommand: Command | undefined = undefined
 
     words.forEach(word => {
-      if (word == "count" || word == "code"){
+      if (word == currentLanguage.commandCount || word == currentLanguage.commandCode){
         if (currentCommand != undefined){
           commands = [...commands, currentCommand]
         }
@@ -122,7 +120,11 @@ class VoiceTest extends Component<Props, State> {
           key: word,
           value: ""
         }
-      } else if (word in ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", ] && currentCommand != undefined){
+      } else if (currentLanguage.digitsFrom0.includes(word) && currentCommand != undefined) {
+        const digit = currentLanguage.digitsFrom0.indexOf(word)
+        currentCommand.value += digit.toString()
+      
+      } else if (["1", "2", "3", "4", "5", "6", "7", "8", "9", "0" ].includes(word) && currentCommand != undefined){
         currentCommand.value += word
       } else if (word == "reset"){
         currentCommand = undefined
