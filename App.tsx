@@ -49,12 +49,19 @@ class VoiceTest extends Component<Props, State> {
   onSpeechResults = (e: SpeechResultsEvent) => {
     console.log('onSpeechResults: ', e);
     if (e.value !== undefined && e.value.length > 0){
-    // result typically returns an array
-    // if it has multiple elements, they're generally different spellings of the same text
-    // we handle this later
+      // result typically returns an array
+      // if it has multiple elements, they're generally different spellings of the same text
+
+
+      // we assume that the string with the most words is the best detection
+      // this avoids sequences of numbers said together being ignored
+      // e.g. "five seven" being detected as "57" instead of "5 7"
+      // also solves problems with the last words being ignored
+      const bestDetected = e.value.reduce((prev, current) =>
+      prev.split(" ").length > current.split(" ").length ? prev : current, '');
 
       this.setState({
-        partialResults: e.value.reverse(),
+        partialResults: [bestDetected],
       });
 
       this.submitDebugText()
@@ -101,7 +108,7 @@ class VoiceTest extends Component<Props, State> {
     if (this.state.recognizing){
       setTimeout(() => {
         this._startRecognizing()
-      }, 500)
+      }, 1000)
     }
   };
 
