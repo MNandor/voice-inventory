@@ -25,3 +25,17 @@ Commands in order:
 
 - `npm i @react-native-voice/voice --save` (run once)
 - `npx expo run:iOS`
+
+## Language
+
+The app supports language settings.
+See `Language.tsx`
+
+## Known Issues
+
+- The voice recognition library occasionally detects sequences of numbers as one word. For example, "five seven" might be detected as "57", which is indistinguishable from "fifty-seven".
+    - Workaround: say the digits slower.
+- The voice recognition library might detect "two" as "too" or "to" depending on the accent of the user (because "count to" is a common phrase).
+    - Possible fix: hardcode an exception.
+- If "back" or "reset" is used, the Current Status might still display the previous command, while the correct state should be Waiting.
+    - Possible fix: handle in textToCommands
