@@ -16,7 +16,8 @@ type State = {
   results: string[];
   partialResults: string[];
   loggedCommands: Command[],
-  recognizing: boolean
+  recognizing: boolean,
+  backPressed: boolean
 };
 
 type Command = {
@@ -36,7 +37,8 @@ class VoiceTest extends Component<Props, State> {
     results: [],
     partialResults: [],
     loggedCommands: [],
-    recognizing: false
+    recognizing: false,
+    backPressed: false
   };
 
   constructor(props: Props) {
@@ -128,15 +130,24 @@ class VoiceTest extends Component<Props, State> {
 
       // handle "back" commands
       // each removes a previously recorded command
+      let backPressed = false
       while(newCommands.length > 0 && newCommands[0].key == currentLanguage.commandBack){
         prevCommands.pop()
         newCommands.shift()
+        backPressed = true
+      }
+
+      if (backPressed) {
+        setTimeout(()=> {
+            this.setState({backPressed: false})
+        }, 2000)
       }
 
       return {
         partialResults: [],
         results: [...prevState.results],
-        loggedCommands: [...prevCommands, ...newCommands]
+        loggedCommands: [...prevCommands, ...newCommands],
+        backPressed: backPressed
       }
     });
   }
@@ -271,6 +282,7 @@ class VoiceTest extends Component<Props, State> {
         </View>
 
         <Text>Values</Text>
+        {this.state.backPressed && <Text>Back pressed</Text>}
         <ScrollView style={{width: '100%' }} contentContainerStyle={{alignItems: 'center'}}>
         {this.state.loggedCommands.slice().reverse().map((command, index) => {
           return (
